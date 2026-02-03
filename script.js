@@ -1,6 +1,5 @@
 // ===== CONFIGURATION =====
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyW7Co7ZWJrXYheJa3nfKviEtJwr_BkEqOFZtZgZRPta32T2VX8Q0lD8WHnqtR7is9U0A/exec';
-const DRAFT_KEY = 'tka_semarang2_draft';
 
 // ===== FIELD DEFINITIONS =====
 const ALL_FIELDS = [
@@ -24,6 +23,9 @@ const GROUP_FIELDS = {
     bahasaAsing: ['bahasaPrancis', 'bahasaJepang', 'bahasaMandarin', 'bahasaKorea', 'bahasaArab']
 };
 
+// Store data
+let spreadsheetData = [];
+
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', function() {
     initTheme();
@@ -33,8 +35,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initButtons();
     initScrollListener();
     initKeyboardShortcuts();
-    checkDraft();
     updateProgress();
+    fetchDataCount();
 });
 
 // ===== THEME =====
@@ -71,19 +73,16 @@ function initAccordion() {
             const item = this.parentElement;
             const isActive = item.classList.contains('active');
             
-            // Close all
             document.querySelectorAll('.accordion-item').forEach(i => {
                 i.classList.remove('active');
             });
             
-            // Open if wasn't active
             if (!isActive) {
                 item.classList.add('active');
             }
         });
     });
     
-    // Open first accordion by default
     document.querySelector('.accordion-item')?.classList.add('active');
 }
 
@@ -91,7 +90,6 @@ function initAccordion() {
 function initInputListeners() {
     document.querySelectorAll('input').forEach(input => {
         input.addEventListener('input', function() {
-            // Validate number range
             if (this.type === 'number') {
                 let val = parseFloat(this.value);
                 if (val < 0) this.value = 0;
@@ -103,7 +101,6 @@ function initInputListeners() {
             updateProgress();
             updateSummary();
             updateAccordionCounts();
-            autoSaveDraft();
         });
     });
 }
@@ -169,7 +166,6 @@ function updateProgress() {
 
 // ===== SUMMARY =====
 function updateSummary() {
-    // Wajib average
     let wajibSum = 0, wajibCount = 0;
     WAJIB_FIELDS.forEach(id => {
         const val = parseFloat(document.getElementById(id)?.value) || 0;
@@ -177,7 +173,6 @@ function updateSummary() {
     });
     const avgWajib = wajibCount > 0 ? (wajibSum / wajibCount).toFixed(2) : '0.00';
     
-    // Pilihan average
     let pilihanSum = 0, pilihanCount = 0;
     PILIHAN_FIELDS.forEach(id => {
         const val = parseFloat(document.getElementById(id)?.value) || 0;
@@ -185,7 +180,6 @@ function updateSummary() {
     });
     const avgPilihan = pilihanCount > 0 ? (pilihanSum / pilihanCount).toFixed(2) : '0.00';
     
-    // Total
     const totalSum = wajibSum + pilihanSum;
     const totalCount = wajibCount + pilihanCount;
     const avgTotal = totalCount > 0 ? (totalSum / totalCount).toFixed(2) : '0.00';
@@ -220,21 +214,18 @@ function initButtons() {
         submitForm();
     });
     
-    // Draft buttons
-    document.getElementById('saveDraftBtn').addEventListener('click', saveDraft);
-    document.getElementById('loadDraftBtn').addEventListener('click', loadDraft);
-    document.getElementById('clearDraftBtn').addEventListener('click', clearDraft);
-    
-    // Preview
-    document.getElementById('previewBtn').addEventListener('click', showPreview);
+    // Preview Data
+    document.getElementById('previewBtn').addEventListener('click', showPreviewData);
     document.getElementById('previewCloseBtn').addEventListener('click', closePreview);
-    document.getElementById('previewEditBtn').addEventListener('click', closePreview);
-    document.getElementById('previewSubmitBtn').addEventListener('click', function() {
-        closePreview();
-        submitForm();
-    });
+    document.getElementById('refreshBtn').addEventListener('click', refreshData);
     
-    // Modal close buttons
+    // Search
+    document.getElementById('searchInput').addEventListener('input', filterData);
+    
+    // Detail Modal
+    document.getElementById('detailCloseBtn').addEventListener('click', closeDetail);
+    
+    // Success & Error Modals
     document.getElementById('successCloseBtn').addEventListener('click', closeSuccessModal);
     document.getElementById('errorCloseBtn').addEventListener('click', closeErrorModal);
     document.getElementById('retryBtn').addEventListener('click', function() {
@@ -267,123 +258,260 @@ function initKeyboardShortcuts() {
             e.preventDefault();
             submitForm();
         }
-    });
-}
-
-// ===== DRAFT FUNCTIONS =====
-function autoSaveDraft() {
-    const data = {};
-    ALL_FIELDS.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) data[id] = el.value;
-    });
-    localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
-}
-
-function saveDraft() {
-    autoSaveDraft();
-    showToast('Draft berhasil disimpan!', 'success');
-}
-
-function loadDraft() {
-    const draft = localStorage.getItem(DRAFT_KEY);
-    if (draft) {
-        const data = JSON.parse(draft);
-        ALL_FIELDS.forEach(id => {
-            const el = document.getElementById(id);
-            if (el && data[id]) {
-                el.value = data[id];
-                if (el.type === 'number') {
-                    updateScoreBadge(id, data[id]);
-                    syncRangeSlider(id, data[id]);
-                }
-            }
-        });
-        updateProgress();
-        updateSummary();
-        updateAccordionCounts();
-        showToast('Draft berhasil dimuat!', 'success');
-    } else {
-        showToast('Tidak ada draft tersimpan', 'warning');
-    }
-}
-
-function clearDraft() {
-    if (confirm('Hapus draft tersimpan?')) {
-        localStorage.removeItem(DRAFT_KEY);
-        showToast('Draft dihapus!', 'info');
-    }
-}
-
-function checkDraft() {
-    const draft = localStorage.getItem(DRAFT_KEY);
-    if (draft) {
-        const data = JSON.parse(draft);
-        const hasData = Object.values(data).some(v => v);
-        if (hasData) {
-            showToast('Ada draft tersimpan. Klik "Muat Draft" untuk memuat.', 'info');
+        if (e.key === 'Escape') {
+            closePreview();
+            closeDetail();
+            closeSuccessModal();
+            closeErrorModal();
         }
+    });
+}
+
+// ===== FETCH DATA COUNT =====
+async function fetchDataCount() {
+    try {
+        const response = await fetch(SCRIPT_URL);
+        const result = await response.json();
+        if (result.status === 'success') {
+            document.getElementById('dataCount').textContent = result.total || 0;
+        }
+    } catch (error) {
+        console.log('Could not fetch data count');
     }
 }
 
-// ===== PREVIEW =====
-function showPreview() {
-    const sections = [
-        { title: 'Data Siswa', fields: [
-            { label: 'Nama Siswa', id: 'namaSiswa' },
-            { label: 'Asal Sekolah', id: 'asalSekolah' }
-        ]},
-        { title: 'Nilai TKA Wajib', fields: [
-            { label: 'Matematika', id: 'matematika' },
-            { label: 'Bahasa Indonesia', id: 'bahasaIndonesia' },
-            { label: 'Bahasa Inggris', id: 'bahasaInggris' }
-        ]},
-        { title: 'Nilai TKA Pilihan', fields: [
-            { label: 'Matematika TL', id: 'matematikaTL' },
-            { label: 'B. Indonesia TL', id: 'bahasaIndonesiaTL' },
-            { label: 'B. Inggris TL', id: 'bahasaInggrisTL' },
-            { label: 'Fisika', id: 'fisika' },
-            { label: 'Kimia', id: 'kimia' },
-            { label: 'Biologi', id: 'biologi' },
-            { label: 'Ekonomi', id: 'ekonomi' },
-            { label: 'Geografi', id: 'geografi' },
-            { label: 'Sosiologi', id: 'sosiologi' },
-            { label: 'Antropologi', id: 'antropologi' },
-            { label: 'Sejarah', id: 'sejarah' },
-            { label: 'PPKn', id: 'ppkn' },
-            { label: 'PKK', id: 'pkk' },
-            { label: 'B. Prancis', id: 'bahasaPrancis' },
-            { label: 'B. Jepang', id: 'bahasaJepang' },
-            { label: 'B. Mandarin', id: 'bahasaMandarin' },
-            { label: 'B. Korea', id: 'bahasaKorea' },
-            { label: 'B. Arab', id: 'bahasaArab' }
-        ]}
-    ];
+// ===== PREVIEW DATA FROM SPREADSHEET =====
+async function showPreviewData() {
+    document.getElementById('previewModal').classList.add('show');
+    document.getElementById('previewBody').innerHTML = `
+        <div class="empty-state">
+            <div class="loading-spinner"></div>
+            <p>Memuat data...</p>
+        </div>
+    `;
     
-    let html = '';
-    sections.forEach(section => {
-        html += `<div class="preview-section"><h4>${section.title}</h4><div class="preview-grid">`;
-        section.fields.forEach(field => {
-            const val = document.getElementById(field.id)?.value || '';
-            html += `<div class="preview-item">
-                <span class="label">${field.label}</span>
-                <span class="value ${val ? '' : 'empty'}">${val || '-'}</span>
-            </div>`;
-        });
-        html += '</div></div>';
+    await loadSpreadsheetData();
+}
+
+async function loadSpreadsheetData() {
+    try {
+        const response = await fetch(SCRIPT_URL);
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+            spreadsheetData = result.data || [];
+            document.getElementById('totalData').textContent = result.total || 0;
+            document.getElementById('dataCount').textContent = result.total || 0;
+            renderDataTable(spreadsheetData);
+        } else {
+            document.getElementById('previewBody').innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h4>Gagal Memuat Data</h4>
+                    <p>${result.message || 'Terjadi kesalahan'}</p>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('previewBody').innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-wifi"></i>
+                <h4>Koneksi Bermasalah</h4>
+                <p>Tidak dapat terhubung ke server</p>
+            </div>
+        `;
+    }
+}
+
+function renderDataTable(data) {
+    if (!data || data.length === 0) {
+        document.getElementById('previewBody').innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <h4>Belum Ada Data</h4>
+                <p>Data yang diinput akan muncul di sini</p>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = `
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Siswa</th>
+                    <th>Asal Sekolah</th>
+                    <th>Mat</th>
+                    <th>B.Indo</th>
+                    <th>B.Ing</th>
+                    <th>Rata²</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+    
+    data.forEach((row, index) => {
+        const mat = parseFloat(row['Matematika']) || 0;
+        const indo = parseFloat(row['Bahasa Indonesia']) || 0;
+        const ing = parseFloat(row['Bahasa Inggris']) || 0;
+        const avg = mat + indo + ing > 0 ? ((mat + indo + ing) / 3).toFixed(1) : '-';
+        
+        html += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>
+                    <div class="student-name">${row['Nama Siswa'] || '-'}</div>
+                    <div class="student-school">${row['Timestamp'] || ''}</div>
+                </td>
+                <td>${row['Asal Sekolah'] || '-'}</td>
+                <td class="score-cell">${mat || '-'}</td>
+                <td class="score-cell">${indo || '-'}</td>
+                <td class="score-cell">${ing || '-'}</td>
+                <td class="score-cell"><strong>${avg}</strong></td>
+                <td>
+                    <button class="btn-detail" onclick="showDetail(${index})">
+                        <i class="fas fa-eye"></i> Detail
+                    </button>
+                </td>
+            </tr>
+        `;
     });
     
+    html += '</tbody></table>';
     document.getElementById('previewBody').innerHTML = html;
-    document.getElementById('previewModal').classList.add('show');
+}
+
+function filterData() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    
+    if (!searchTerm) {
+        renderDataTable(spreadsheetData);
+        return;
+    }
+    
+    const filtered = spreadsheetData.filter(row => {
+        const nama = (row['Nama Siswa'] || '').toLowerCase();
+        const sekolah = (row['Asal Sekolah'] || '').toLowerCase();
+        return nama.includes(searchTerm) || sekolah.includes(searchTerm);
+    });
+    
+    renderDataTable(filtered);
+    document.getElementById('totalData').textContent = filtered.length;
+}
+
+async function refreshData() {
+    const btn = document.getElementById('refreshBtn');
+    btn.classList.add('loading');
+    await loadSpreadsheetData();
+    btn.classList.remove('loading');
+    showToast('Data berhasil diperbarui!', 'success');
 }
 
 function closePreview() {
     document.getElementById('previewModal').classList.remove('show');
+    document.getElementById('searchInput').value = '';
+}
+
+// ===== DETAIL MODAL =====
+function showDetail(index) {
+    const row = spreadsheetData[index];
+    if (!row) return;
+    
+    const sections = [
+        {
+            title: 'Data Siswa',
+            items: [
+                { label: 'Timestamp', value: row['Timestamp'], full: true },
+                { label: 'Nama Siswa', value: row['Nama Siswa'] },
+                { label: 'Asal Sekolah', value: row['Asal Sekolah'] }
+            ]
+        },
+        {
+            title: 'Nilai TKA Wajib',
+            items: [
+                { label: 'Matematika', value: row['Matematika'] },
+                { label: 'Bahasa Indonesia', value: row['Bahasa Indonesia'] },
+                { label: 'Bahasa Inggris', value: row['Bahasa Inggris'] }
+            ]
+        },
+        {
+            title: 'Nilai TKA Pilihan - Tingkat Lanjut',
+            items: [
+                { label: 'Matematika TL', value: row['Matematika TL'] },
+                { label: 'B. Indonesia TL', value: row['B. Indonesia TL'] },
+                { label: 'B. Inggris TL', value: row['B. Inggris TL'] }
+            ]
+        },
+        {
+            title: 'Nilai TKA Pilihan - IPA',
+            items: [
+                { label: 'Fisika', value: row['Fisika'] },
+                { label: 'Kimia', value: row['Kimia'] },
+                { label: 'Biologi', value: row['Biologi'] }
+            ]
+        },
+        {
+            title: 'Nilai TKA Pilihan - IPS',
+            items: [
+                { label: 'Ekonomi', value: row['Ekonomi'] },
+                { label: 'Geografi', value: row['Geografi'] },
+                { label: 'Sosiologi', value: row['Sosiologi'] },
+                { label: 'Antropologi', value: row['Antropologi'] },
+                { label: 'Sejarah', value: row['Sejarah'] }
+            ]
+        },
+        {
+            title: 'Nilai TKA Pilihan - Lainnya',
+            items: [
+                { label: 'PPKn', value: row['PPKn'] },
+                { label: 'PKK', value: row['PKK'] }
+            ]
+        },
+        {
+            title: 'Nilai TKA Pilihan - Bahasa Asing',
+            items: [
+                { label: 'B. Prancis', value: row['B. Prancis'] },
+                { label: 'B. Jepang', value: row['B. Jepang'] },
+                { label: 'B. Mandarin', value: row['B. Mandarin'] },
+                { label: 'B. Korea', value: row['B. Korea'] },
+                { label: 'B. Arab', value: row['B. Arab'] }
+            ]
+        }
+    ];
+    
+    let html = '';
+    sections.forEach(section => {
+        // Check if section has any values
+        const hasValues = section.items.some(item => item.value);
+        if (!hasValues && section.title !== 'Data Siswa' && section.title !== 'Nilai TKA Wajib') return;
+        
+        html += `<div class="detail-section"><h4>${section.title}</h4><div class="detail-grid">`;
+        section.items.forEach(item => {
+            const val = item.value || '';
+            const fullClass = item.full ? 'full-width' : '';
+            html += `
+                <div class="detail-item ${fullClass}">
+                    <span class="label">${item.label}</span>
+                    <span class="value ${val ? '' : 'empty'}">${val || '-'}</span>
+                </div>
+            `;
+        });
+        html += '</div></div>';
+    });
+    
+    document.getElementById('detailBody').innerHTML = html;
+    document.getElementById('detailModal').classList.add('show');
+}
+
+function closeDetail() {
+    document.getElementById('detailModal').classList.remove('show');
 }
 
 // ===== FORM SUBMIT =====
 async function submitForm() {
-    // Validate
     const requiredIds = ['namaSiswa', 'asalSekolah', 'matematika', 'bahasaIndonesia', 'bahasaInggris'];
     let isValid = true;
     
@@ -404,10 +532,9 @@ async function submitForm() {
         return;
     }
     
-    // Show loading
     document.getElementById('loadingOverlay').classList.add('show');
+    document.getElementById('loadingText').textContent = 'Menyimpan data...';
     
-    // Prepare data
     const formData = {
         timestamp: new Date().toLocaleString('id-ID'),
         namaSiswa: document.getElementById('namaSiswa').value,
@@ -447,17 +574,12 @@ async function submitForm() {
         document.getElementById('successModal').classList.add('show');
         launchConfetti();
         
-        // Clear
-        localStorage.removeItem(DRAFT_KEY);
+        // Reset form
         document.getElementById('formTKA').reset();
-        
-        // Reset all badges
         document.querySelectorAll('.score-badge').forEach(badge => {
             badge.textContent = '-';
             badge.className = 'score-badge';
         });
-        
-        // Reset range sliders
         document.querySelectorAll('.range-slider').forEach(slider => {
             slider.value = 0;
         });
@@ -465,6 +587,7 @@ async function submitForm() {
         updateProgress();
         updateSummary();
         updateAccordionCounts();
+        fetchDataCount();
         
     } catch (error) {
         console.error('Error:', error);
@@ -477,7 +600,6 @@ async function submitForm() {
 function resetForm() {
     if (confirm('Yakin ingin mengosongkan semua data?')) {
         document.getElementById('formTKA').reset();
-        localStorage.removeItem(DRAFT_KEY);
         
         document.querySelectorAll('.score-badge').forEach(badge => {
             badge.textContent = '-';
@@ -567,3 +689,6 @@ function launchConfetti() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }, 4000);
 }
+
+// Make functions globally available
+window.showDetail = showDetail;
