@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Input Nilai TKA SMA - Cabang Semarang-2</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h1>Form Input Nilai TKA SMA</h1>
+            <p class="branch">Cabang Semarang-2</p>
+        </header>
+
+        <!-- Form -->
+        <form id="formTKA" class="form-container">
+            <!-- Data Siswa -->
+            <div class="form-section">
+                <h2><i class="fas fa-user"></i> Data Siswa</h2>
+                <div class="form-group">
+                    <label for="namaSiswa">Nama Siswa <span class="required">*</span></label>
+                    <input type="text" id="namaSiswa" name="namaSiswa" placeholder="Masukkan nama lengkap siswa" required>
+                </div>
+                <div class="form-group">
+                    <label for="asalSekolah">Asal Sekolah <span class="required">*</span></label>
+                    <input type="text" id="asalSekolah" name="asalSekolah" placeholder="Masukkan nama sekolah asal" required>
+                </div>
+            </div>
+
+            <!-- Nilai TKA Wajib -->
+            <div class="form-section">
+                <h2><i class="fas fa-book"></i> Nilai TKA Wajib</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="matematika">Matematika <span class="required">*</span></label>
+                        <input type="number" id="matematika" name="matematika" min="0" max="100" step="0.01" placeholder="0-100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bahasaIndonesia">Bahasa Indonesia <span class="required">*</span></label>
+                        <input type="number" id="bahasaIndonesia" name="bahasaIndonesia" min="0" max="100" step="0.01" placeholder="0-100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bahasaInggris">Bahasa Inggris <span class="required">*</span></label>
+                        <input type="number" id="bahasaInggris" name="bahasaInggris" min="0" max="100" step="0.01" placeholder="0-100" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nilai TKA Pilihan -->
+            <div class="form-section">
+                <h2><i class="fas fa-list-check"></i> Nilai TKA Pilihan</h2>
+                <p class="section-note"><i class="fas fa-info-circle"></i> Isi nilai sesuai mata pelajaran yang dipilih siswa (opsional)</p>
+                
+                <!-- Tingkat Lanjut -->
+                <div class="subsection">
+                    <h3><i class="fas fa-arrow-up"></i> Tingkat Lanjut</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="matematikaTL">Matematika Tingkat Lanjut</label>
+                            <input type="number" id="matematikaTL" name="matematikaTL" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                        <div class="form-group">
+                            <label for="bahasaIndonesiaTL">Bahasa Indonesia Tingkat Lanjut</label>
+                            <input type="number" id="bahasaIndonesiaTL" name="bahasaIndonesiaTL" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                        <div class="form-group">
+                            <label for="bahasaInggrisTL">Bahasa Inggris Tingkat Lanjut</label>
+                            <input type="number" id="bahasaInggrisTL" name="bahasaInggrisTL" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IPA -->
+                <div class="subsection">
+                    <h3><i class="fas fa-flask"></i> Ilmu Pengetahuan Alam (IPA)</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="fisika">Fisika</label>
+                            <input type="number" id="fisika" name="fisika" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                        <div class="form-group">
+                            <label for="kimia">Kimia</label>
+                            <input type="number" id="kimia" name="kimia" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                        <div class="form-group">
+                            <label for="biologi">Biologi</label>
+                            <input type="number" id="biologi" name="biologi" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IPS -->
+                <div class="subsection">
+                    <h3><i class="fas fa-globe"></i> Ilmu Pengetahuan Sosial (IPS)</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="ekonomi">Ekonomi</label>
+                            <input type="number" id="ekonomi" name="ekonomi" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                        <div class="form-group">
+                            <label for="geografi">Geografi</label>
+                            <input type="number" id="geografi" name="geografi" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                        <div class="form-group">
+                            <label for="sosiologi">Sosiologi</label>
+                            <input type="number" id="sosiologi" name="sosiologi" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                        <div class="form-group">
+                            <label for="antropologi">Antropologi</label>
+                            <input type="number" id="antropologi" name="antropologi" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                        <div class="form-group">
+                            <label for="sejarah">Sejarah</label>
+                            <input type="number" id="sejarah" name="sejarah" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lainnya -->
+                <div class="subsection">
+                    <h3><i class="fas fa-book-open"></i> Lainnya</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="ppkn">Pendidikan Pancasila dan Kewarganegaraan</label>
+                            <input type="number" id="ppkn" name="ppkn" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                        <div class="form-group">
+                            <label for="pkk">Produk/Projek Kreatif dan Kewirausahaan</label>
+                            <input type="number" id="pkk" name="pkk" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bahasa Asing -->
+                <div class="subsection">
+                    <h3><i class="fas fa-language"></i> Bahasa Asing</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="bahasaPrancis">Bahasa Prancis</label>
+                            <input type="number" id="bahasaPrancis" name="bahasaPrancis" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                        <div class="form-group">
+                            <label for="bahasaJepang">Bahasa Jepang</label>
+                            <input type="number" id="bahasaJepang" name="bahasaJepang" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                        <div class="form-group">
+                            <label for="bahasaMandarin">Bahasa Mandarin</label>
+                            <input type="number" id="bahasaMandarin" name="bahasaMandarin" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                        <div class="form-group">
+                            <label for="bahasaKorea">Bahasa Korea</label>
+                            <input type="number" id="bahasaKorea" name="bahasaKorea" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                        <div class="form-group">
+                            <label for="bahasaArab">Bahasa Arab</label>
+                            <input type="number" id="bahasaArab" name="bahasaArab" min="0" max="100" step="0.01" placeholder="0-100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-actions">
+                <button type="button" class="btn btn-reset" onclick="resetForm()">
+                    <i class="fas fa-rotate-left"></i> Reset
+                </button>
+                <button type="submit" class="btn btn-submit">
+                    <i class="fas fa-paper-plane"></i> Kirim Data
+                </button>
+            </div>
+        </form>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <p>Menyimpan data...</p>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="successModal" class="modal">
+            <div class="modal-content success">
+                <i class="fas fa-check-circle"></i>
+                <h3>Berhasil!</h3>
+                <p>Data nilai TKA berhasil disimpan.</p>
+                <button onclick="closeModal()" class="btn btn-submit">OK</button>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div id="errorModal" class="modal">
+            <div class="modal-content error">
+                <i class="fas fa-times-circle"></i>
+                <h3>Gagal!</h3>
+                <p id="errorMessage">Terjadi kesalahan saat menyimpan data.</p>
+                <button onclick="closeErrorModal()" class="btn btn-reset">Tutup</button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 TKA SMA - Cabang Semarang-2. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
