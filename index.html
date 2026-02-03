@@ -1,166 +1,489 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Input Nilai TKA SMA - Cabang Semarang-2</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
 </head>
 <body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="bg-shape shape-1"></div>
+        <div class="bg-shape shape-2"></div>
+        <div class="bg-shape shape-3"></div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop" title="Kembali ke Atas">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
     <div class="container">
         <!-- Header -->
         <header class="header">
-            <div class="logo">
-                <i class="fas fa-graduation-cap"></i>
+            <div class="header-content">
+                <div class="logo-wrapper">
+                    <div class="logo">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="logo-ring"></div>
+                </div>
+                <div class="header-text">
+                    <h1>Form Input Nilai TKA SMA</h1>
+                    <p class="branch">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Cabang Semarang-2
+                    </p>
+                </div>
+                <div class="header-badge">
+                    <span class="badge">2024/2025</span>
+                </div>
             </div>
-            <h1>Form Input Nilai TKA SMA</h1>
-            <p class="branch">Cabang Semarang-2</p>
+            
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="progress-text">
+                    <span id="progressText">0%</span> Terisi
+                </div>
+            </div>
         </header>
+
+        <!-- Action Buttons -->
+        <div class="action-bar">
+            <button type="button" class="action-btn" id="loadDraftBtn" title="Muat Draft">
+                <i class="fas fa-folder-open"></i>
+                <span>Muat Draft</span>
+            </button>
+            <button type="button" class="action-btn" id="saveDraftBtn" title="Simpan Draft">
+                <i class="fas fa-save"></i>
+                <span>Simpan Draft</span>
+            </button>
+            <button type="button" class="action-btn" id="previewBtn" title="Preview Data">
+                <i class="fas fa-eye"></i>
+                <span>Preview</span>
+            </button>
+        </div>
 
         <!-- Form -->
         <form id="formTKA" class="form-container">
             <!-- Data Siswa -->
-            <div class="form-section">
-                <h2><i class="fas fa-user"></i> Data Siswa</h2>
-                <div class="form-group">
-                    <label for="namaSiswa">Nama Siswa <span class="required">*</span></label>
-                    <input type="text" id="namaSiswa" name="namaSiswa" placeholder="Masukkan nama lengkap siswa" required>
+            <div class="form-section" data-section="1">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>Data Siswa</h2>
+                        <p>Informasi dasar siswa</p>
+                    </div>
+                    <div class="section-status" id="section1Status">
+                        <i class="fas fa-circle"></i>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="asalSekolah">Asal Sekolah <span class="required">*</span></label>
-                    <input type="text" id="asalSekolah" name="asalSekolah" placeholder="Masukkan nama sekolah asal" required>
+                <div class="section-content">
+                    <div class="form-row">
+                        <div class="form-group floating">
+                            <input type="text" id="namaSiswa" name="namaSiswa" placeholder=" " required>
+                            <label for="namaSiswa">Nama Lengkap Siswa</label>
+                            <span class="input-icon"><i class="fas fa-user"></i></span>
+                            <span class="input-border"></span>
+                        </div>
+                        <div class="form-group floating">
+                            <input type="text" id="asalSekolah" name="asalSekolah" placeholder=" " required>
+                            <label for="asalSekolah">Asal Sekolah</label>
+                            <span class="input-icon"><i class="fas fa-school"></i></span>
+                            <span class="input-border"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Nilai TKA Wajib -->
-            <div class="form-section">
-                <h2><i class="fas fa-book"></i> Nilai TKA Wajib</h2>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="matematika">Matematika <span class="required">*</span></label>
-                        <input type="number" id="matematika" name="matematika" min="0" max="100" step="0.01" placeholder="0-100" required>
+            <div class="form-section" data-section="2">
+                <div class="section-header">
+                    <div class="section-icon mandatory">
+                        <i class="fas fa-book"></i>
                     </div>
-                    <div class="form-group">
-                        <label for="bahasaIndonesia">Bahasa Indonesia <span class="required">*</span></label>
-                        <input type="number" id="bahasaIndonesia" name="bahasaIndonesia" min="0" max="100" step="0.01" placeholder="0-100" required>
+                    <div class="section-title">
+                        <h2>Nilai TKA Wajib</h2>
+                        <p>Mata pelajaran wajib (harus diisi)</p>
                     </div>
-                    <div class="form-group">
-                        <label for="bahasaInggris">Bahasa Inggris <span class="required">*</span></label>
-                        <input type="number" id="bahasaInggris" name="bahasaInggris" min="0" max="100" step="0.01" placeholder="0-100" required>
+                    <div class="section-badge mandatory">WAJIB</div>
+                </div>
+                <div class="section-content">
+                    <div class="form-grid cols-3">
+                        <div class="form-group score-input">
+                            <label for="matematika">
+                                <i class="fas fa-calculator"></i>
+                                Matematika
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="number" id="matematika" name="matematika" min="0" max="100" step="0.01" placeholder="0" required>
+                                <span class="score-badge" data-score="0">-</span>
+                            </div>
+                            <div class="input-range">
+                                <input type="range" min="0" max="100" value="0" class="range-slider" data-target="matematika">
+                            </div>
+                        </div>
+                        <div class="form-group score-input">
+                            <label for="bahasaIndonesia">
+                                <i class="fas fa-language"></i>
+                                Bahasa Indonesia
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="number" id="bahasaIndonesia" name="bahasaIndonesia" min="0" max="100" step="0.01" placeholder="0" required>
+                                <span class="score-badge" data-score="0">-</span>
+                            </div>
+                            <div class="input-range">
+                                <input type="range" min="0" max="100" value="0" class="range-slider" data-target="bahasaIndonesia">
+                            </div>
+                        </div>
+                        <div class="form-group score-input">
+                            <label for="bahasaInggris">
+                                <i class="fas fa-globe"></i>
+                                Bahasa Inggris
+                            </label>
+                            <div class="input-wrapper">
+                                <input type="number" id="bahasaInggris" name="bahasaInggris" min="0" max="100" step="0.01" placeholder="0" required>
+                                <span class="score-badge" data-score="0">-</span>
+                            </div>
+                            <div class="input-range">
+                                <input type="range" min="0" max="100" value="0" class="range-slider" data-target="bahasaInggris">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Nilai TKA Pilihan -->
-            <div class="form-section">
-                <h2><i class="fas fa-list-check"></i> Nilai TKA Pilihan</h2>
-                <p class="section-note"><i class="fas fa-info-circle"></i> Isi nilai sesuai mata pelajaran yang dipilih siswa (opsional)</p>
-                
-                <!-- Tingkat Lanjut -->
-                <div class="subsection">
-                    <h3><i class="fas fa-arrow-up"></i> Tingkat Lanjut</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="matematikaTL">Matematika Tingkat Lanjut</label>
-                            <input type="number" id="matematikaTL" name="matematikaTL" min="0" max="100" step="0.01" placeholder="0-100">
+            <div class="form-section" data-section="3">
+                <div class="section-header">
+                    <div class="section-icon optional">
+                        <i class="fas fa-list-check"></i>
+                    </div>
+                    <div class="section-title">
+                        <h2>Nilai TKA Pilihan</h2>
+                        <p>Isi sesuai mata pelajaran yang dipilih</p>
+                    </div>
+                    <div class="section-badge optional">OPSIONAL</div>
+                </div>
+                <div class="section-content">
+                    <!-- Accordion: Tingkat Lanjut -->
+                    <div class="accordion">
+                        <div class="accordion-item">
+                            <button type="button" class="accordion-header" data-target="tingkatLanjut">
+                                <div class="accordion-icon">
+                                    <i class="fas fa-arrow-up-right-dots"></i>
+                                </div>
+                                <span>Tingkat Lanjut</span>
+                                <div class="accordion-count" id="countTingkatLanjut">0/3</div>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div class="accordion-content" id="tingkatLanjut">
+                                <div class="form-grid cols-3">
+                                    <div class="form-group score-input">
+                                        <label for="matematikaTL">
+                                            <i class="fas fa-square-root-variable"></i>
+                                            Matematika TL
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="matematikaTL" name="matematikaTL" min="0" max="100" step="0.01" placeholder="0" data-group="tingkatLanjut">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group score-input">
+                                        <label for="bahasaIndonesiaTL">
+                                            <i class="fas fa-book-open"></i>
+                                            B. Indonesia TL
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="bahasaIndonesiaTL" name="bahasaIndonesiaTL" min="0" max="100" step="0.01" placeholder="0" data-group="tingkatLanjut">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group score-input">
+                                        <label for="bahasaInggrisTL">
+                                            <i class="fas fa-earth-americas"></i>
+                                            B. Inggris TL
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="bahasaInggrisTL" name="bahasaInggrisTL" min="0" max="100" step="0.01" placeholder="0" data-group="tingkatLanjut">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="bahasaIndonesiaTL">Bahasa Indonesia Tingkat Lanjut</label>
-                            <input type="number" id="bahasaIndonesiaTL" name="bahasaIndonesiaTL" min="0" max="100" step="0.01" placeholder="0-100">
+
+                        <!-- Accordion: IPA -->
+                        <div class="accordion-item">
+                            <button type="button" class="accordion-header" data-target="ipa">
+                                <div class="accordion-icon ipa">
+                                    <i class="fas fa-flask-vial"></i>
+                                </div>
+                                <span>Ilmu Pengetahuan Alam (IPA)</span>
+                                <div class="accordion-count" id="countIpa">0/3</div>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div class="accordion-content" id="ipa">
+                                <div class="form-grid cols-3">
+                                    <div class="form-group score-input">
+                                        <label for="fisika">
+                                            <i class="fas fa-atom"></i>
+                                            Fisika
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="fisika" name="fisika" min="0" max="100" step="0.01" placeholder="0" data-group="ipa">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group score-input">
+                                        <label for="kimia">
+                                            <i class="fas fa-vial"></i>
+                                            Kimia
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="kimia" name="kimia" min="0" max="100" step="0.01" placeholder="0" data-group="ipa">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group score-input">
+                                        <label for="biologi">
+                                            <i class="fas fa-dna"></i>
+                                            Biologi
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="biologi" name="biologi" min="0" max="100" step="0.01" placeholder="0" data-group="ipa">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="bahasaInggrisTL">Bahasa Inggris Tingkat Lanjut</label>
-                            <input type="number" id="bahasaInggrisTL" name="bahasaInggrisTL" min="0" max="100" step="0.01" placeholder="0-100">
+
+                        <!-- Accordion: IPS -->
+                        <div class="accordion-item">
+                            <button type="button" class="accordion-header" data-target="ips">
+                                <div class="accordion-icon ips">
+                                    <i class="fas fa-landmark"></i>
+                                </div>
+                                <span>Ilmu Pengetahuan Sosial (IPS)</span>
+                                <div class="accordion-count" id="countIps">0/5</div>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div class="accordion-content" id="ips">
+                                <div class="form-grid cols-3">
+                                    <div class="form-group score-input">
+                                        <label for="ekonomi">
+                                            <i class="fas fa-chart-line"></i>
+                                            Ekonomi
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="ekonomi" name="ekonomi" min="0" max="100" step="0.01" placeholder="0" data-group="ips">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group score-input">
+                                        <label for="geografi">
+                                            <i class="fas fa-earth-asia"></i>
+                                            Geografi
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="geografi" name="geografi" min="0" max="100" step="0.01" placeholder="0" data-group="ips">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group score-input">
+                                        <label for="sosiologi">
+                                            <i class="fas fa-people-group"></i>
+                                            Sosiologi
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="sosiologi" name="sosiologi" min="0" max="100" step="0.01" placeholder="0" data-group="ips">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group score-input">
+                                        <label for="antropologi">
+                                            <i class="fas fa-users"></i>
+                                            Antropologi
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="antropologi" name="antropologi" min="0" max="100" step="0.01" placeholder="0" data-group="ips">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group score-input">
+                                        <label for="sejarah">
+                                            <i class="fas fa-clock-rotate-left"></i>
+                                            Sejarah
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="sejarah" name="sejarah" min="0" max="100" step="0.01" placeholder="0" data-group="ips">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Accordion: Lainnya -->
+                        <div class="accordion-item">
+                            <button type="button" class="accordion-header" data-target="lainnya">
+                                <div class="accordion-icon lainnya">
+                                    <i class="fas fa-shapes"></i>
+                                </div>
+                                <span>Mata Pelajaran Lainnya</span>
+                                <div class="accordion-count" id="countLainnya">0/2</div>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div class="accordion-content" id="lainnya">
+                                <div class="form-grid cols-2">
+                                    <div class="form-group score-input">
+                                        <label for="ppkn">
+                                            <i class="fas fa-flag"></i>
+                                            PPKn / Pendidikan Pancasila
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="ppkn" name="ppkn" min="0" max="100" step="0.01" placeholder="0" data-group="lainnya">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group score-input">
+                                        <label for="pkk">
+                                            <i class="fas fa-lightbulb"></i>
+                                            Projek Kreatif & Kewirausahaan
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="pkk" name="pkk" min="0" max="100" step="0.01" placeholder="0" data-group="lainnya">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Accordion: Bahasa Asing -->
+                        <div class="accordion-item">
+                            <button type="button" class="accordion-header" data-target="bahasaAsing">
+                                <div class="accordion-icon bahasa">
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                                <span>Bahasa Asing</span>
+                                <div class="accordion-count" id="countBahasaAsing">0/5</div>
+                                <i class="fas fa-chevron-down accordion-arrow"></i>
+                            </button>
+                            <div class="accordion-content" id="bahasaAsing">
+                                <div class="form-grid cols-3">
+                                    <div class="form-group score-input">
+                                        <label for="bahasaPrancis">
+                                            <span class="flag-icon">🇫🇷</span>
+                                            Bahasa Prancis
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="bahasaPrancis" name="bahasaPrancis" min="0" max="100" step="0.01" placeholder="0" data-group="bahasaAsing">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group score-input">
+                                        <label for="bahasaJepang">
+                                            <span class="flag-icon">🇯🇵</span>
+                                            Bahasa Jepang
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="bahasaJepang" name="bahasaJepang" min="0" max="100" step="0.01" placeholder="0" data-group="bahasaAsing">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group score-input">
+                                        <label for="bahasaMandarin">
+                                            <span class="flag-icon">🇨🇳</span>
+                                            Bahasa Mandarin
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="bahasaMandarin" name="bahasaMandarin" min="0" max="100" step="0.01" placeholder="0" data-group="bahasaAsing">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group score-input">
+                                        <label for="bahasaKorea">
+                                            <span class="flag-icon">🇰🇷</span>
+                                            Bahasa Korea
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="bahasaKorea" name="bahasaKorea" min="0" max="100" step="0.01" placeholder="0" data-group="bahasaAsing">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group score-input">
+                                        <label for="bahasaArab">
+                                            <span class="flag-icon">🇸🇦</span>
+                                            Bahasa Arab
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="number" id="bahasaArab" name="bahasaArab" min="0" max="100" step="0.01" placeholder="0" data-group="bahasaAsing">
+                                            <span class="score-badge" data-score="0">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- IPA -->
-                <div class="subsection">
-                    <h3><i class="fas fa-flask"></i> Ilmu Pengetahuan Alam (IPA)</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="fisika">Fisika</label>
-                            <input type="number" id="fisika" name="fisika" min="0" max="100" step="0.01" placeholder="0-100">
+            <!-- Summary Section -->
+            <div class="summary-section" id="summarySection">
+                <div class="summary-header">
+                    <i class="fas fa-chart-pie"></i>
+                    <h3>Ringkasan Nilai</h3>
+                </div>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-icon wajib">
+                            <i class="fas fa-star"></i>
                         </div>
-                        <div class="form-group">
-                            <label for="kimia">Kimia</label>
-                            <input type="number" id="kimia" name="kimia" min="0" max="100" step="0.01" placeholder="0-100">
-                        </div>
-                        <div class="form-group">
-                            <label for="biologi">Biologi</label>
-                            <input type="number" id="biologi" name="biologi" min="0" max="100" step="0.01" placeholder="0-100">
+                        <div class="summary-info">
+                            <span class="summary-label">Rata-rata TKA Wajib</span>
+                            <span class="summary-value" id="avgWajib">0.00</span>
                         </div>
                     </div>
-                </div>
-
-                <!-- IPS -->
-                <div class="subsection">
-                    <h3><i class="fas fa-globe"></i> Ilmu Pengetahuan Sosial (IPS)</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="ekonomi">Ekonomi</label>
-                            <input type="number" id="ekonomi" name="ekonomi" min="0" max="100" step="0.01" placeholder="0-100">
+                    <div class="summary-card">
+                        <div class="summary-icon pilihan">
+                            <i class="fas fa-list"></i>
                         </div>
-                        <div class="form-group">
-                            <label for="geografi">Geografi</label>
-                            <input type="number" id="geografi" name="geografi" min="0" max="100" step="0.01" placeholder="0-100">
-                        </div>
-                        <div class="form-group">
-                            <label for="sosiologi">Sosiologi</label>
-                            <input type="number" id="sosiologi" name="sosiologi" min="0" max="100" step="0.01" placeholder="0-100">
-                        </div>
-                        <div class="form-group">
-                            <label for="antropologi">Antropologi</label>
-                            <input type="number" id="antropologi" name="antropologi" min="0" max="100" step="0.01" placeholder="0-100">
-                        </div>
-                        <div class="form-group">
-                            <label for="sejarah">Sejarah</label>
-                            <input type="number" id="sejarah" name="sejarah" min="0" max="100" step="0.01" placeholder="0-100">
+                        <div class="summary-info">
+                            <span class="summary-label">Rata-rata TKA Pilihan</span>
+                            <span class="summary-value" id="avgPilihan">0.00</span>
                         </div>
                     </div>
-                </div>
-
-                <!-- Lainnya -->
-                <div class="subsection">
-                    <h3><i class="fas fa-book-open"></i> Lainnya</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="ppkn">Pendidikan Pancasila dan Kewarganegaraan</label>
-                            <input type="number" id="ppkn" name="ppkn" min="0" max="100" step="0.01" placeholder="0-100">
+                    <div class="summary-card">
+                        <div class="summary-icon total">
+                            <i class="fas fa-trophy"></i>
                         </div>
-                        <div class="form-group">
-                            <label for="pkk">Produk/Projek Kreatif dan Kewirausahaan</label>
-                            <input type="number" id="pkk" name="pkk" min="0" max="100" step="0.01" placeholder="0-100">
+                        <div class="summary-info">
+                            <span class="summary-label">Rata-rata Keseluruhan</span>
+                            <span class="summary-value" id="avgTotal">0.00</span>
                         </div>
                     </div>
-                </div>
-
-                <!-- Bahasa Asing -->
-                <div class="subsection">
-                    <h3><i class="fas fa-language"></i> Bahasa Asing</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="bahasaPrancis">Bahasa Prancis</label>
-                            <input type="number" id="bahasaPrancis" name="bahasaPrancis" min="0" max="100" step="0.01" placeholder="0-100">
+                    <div class="summary-card">
+                        <div class="summary-icon count">
+                            <i class="fas fa-hashtag"></i>
                         </div>
-                        <div class="form-group">
-                            <label for="bahasaJepang">Bahasa Jepang</label>
-                            <input type="number" id="bahasaJepang" name="bahasaJepang" min="0" max="100" step="0.01" placeholder="0-100">
-                        </div>
-                        <div class="form-group">
-                            <label for="bahasaMandarin">Bahasa Mandarin</label>
-                            <input type="number" id="bahasaMandarin" name="bahasaMandarin" min="0" max="100" step="0.01" placeholder="0-100">
-                        </div>
-                        <div class="form-group">
-                            <label for="bahasaKorea">Bahasa Korea</label>
-                            <input type="number" id="bahasaKorea" name="bahasaKorea" min="0" max="100" step="0.01" placeholder="0-100">
-                        </div>
-                        <div class="form-group">
-                            <label for="bahasaArab">Bahasa Arab</label>
-                            <input type="number" id="bahasaArab" name="bahasaArab" min="0" max="100" step="0.01" placeholder="0-100">
+                        <div class="summary-info">
+                            <span class="summary-label">Mapel Terisi</span>
+                            <span class="summary-value" id="filledCount">0/21</span>
                         </div>
                     </div>
                 </div>
@@ -168,48 +491,127 @@
 
             <!-- Submit Button -->
             <div class="form-actions">
-                <button type="button" class="btn btn-reset" onclick="resetForm()">
-                    <i class="fas fa-rotate-left"></i> Reset
+                <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-rotate-left"></i>
+                    <span>Reset Form</span>
                 </button>
-                <button type="submit" class="btn btn-submit">
-                    <i class="fas fa-paper-plane"></i> Kirim Data
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Kirim Data</span>
+                    <div class="btn-loader"></div>
                 </button>
+            </div>
+
+            <!-- Keyboard Shortcut Hint -->
+            <div class="shortcut-hint">
+                <kbd>Ctrl</kbd> + <kbd>Enter</kbd> untuk mengirim form
             </div>
         </form>
 
-        <!-- Loading Overlay -->
-        <div id="loadingOverlay" class="loading-overlay">
-            <div class="loading-content">
-                <div class="spinner"></div>
-                <p>Menyimpan data...</p>
-            </div>
-        </div>
-
-        <!-- Success Modal -->
-        <div id="successModal" class="modal">
-            <div class="modal-content success">
-                <i class="fas fa-check-circle"></i>
-                <h3>Berhasil!</h3>
-                <p>Data nilai TKA berhasil disimpan.</p>
-                <button onclick="closeModal()" class="btn btn-submit">OK</button>
-            </div>
-        </div>
-
-        <!-- Error Modal -->
-        <div id="errorModal" class="modal">
-            <div class="modal-content error">
-                <i class="fas fa-times-circle"></i>
-                <h3>Gagal!</h3>
-                <p id="errorMessage">Terjadi kesalahan saat menyimpan data.</p>
-                <button onclick="closeErrorModal()" class="btn btn-reset">Tutup</button>
-            </div>
-        </div>
-
         <!-- Footer -->
         <footer class="footer">
-            <p>&copy; 2024 TKA SMA - Cabang Semarang-2. All rights reserved.</p>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>TKA SMA Semarang-2</span>
+                </div>
+                <div class="footer-info">
+                    <p>&copy; 2024 All rights reserved.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" title="Help"><i class="fas fa-circle-question"></i></a>
+                    <a href="#" title="Contact"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
         </footer>
     </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner">
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <i class="fas fa-graduation-cap spinner-icon"></i>
+            </div>
+            <p class="loading-text">Menyimpan data<span class="loading-dots"></span></p>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content success">
+            <div class="modal-icon">
+                <i class="fas fa-check"></i>
+                <div class="icon-ring"></div>
+            </div>
+            <h3>Data Berhasil Disimpan!</h3>
+            <p>Nilai TKA siswa telah berhasil dikirim ke database.</p>
+            <div class="modal-actions">
+                <button onclick="closeModal()" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Input Data Baru
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="errorModal" class="modal">
+        <div class="modal-content error">
+            <div class="modal-icon">
+                <i class="fas fa-times"></i>
+                <div class="icon-ring"></div>
+            </div>
+            <h3>Terjadi Kesalahan!</h3>
+            <p id="errorMessage">Gagal menyimpan data. Silakan coba lagi.</p>
+            <div class="modal-actions">
+                <button onclick="closeErrorModal()" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Kembali
+                </button>
+                <button onclick="retrySubmit()" class="btn btn-primary">
+                    <i class="fas fa-rotate-right"></i>
+                    Coba Lagi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content preview">
+            <div class="modal-header">
+                <h3><i class="fas fa-eye"></i> Preview Data</h3>
+                <button onclick="closePreviewModal()" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="preview-content" id="previewContent">
+                <!-- Preview akan diisi oleh JavaScript -->
+            </div>
+            <div class="modal-actions">
+                <button onclick="closePreviewModal()" class="btn btn-secondary">
+                    <i class="fas fa-edit"></i>
+                    Edit Data
+                </button>
+                <button onclick="submitFromPreview()" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i>
+                    Kirim Data
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-icon"></div>
+        <div class="toast-message"></div>
+    </div>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confettiCanvas"></canvas>
 
     <script src="script.js"></script>
 </body>
