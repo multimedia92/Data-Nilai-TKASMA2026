@@ -60,23 +60,12 @@
             </div>
         </header>
 
-        <!-- Action Buttons -->
+        <!-- Action Button - Hanya Preview -->
         <div class="action-bar">
-            <button type="button" class="action-btn" id="loadDraftBtn" title="Muat Draft">
-                <i class="fas fa-folder-open"></i>
-                <span>Muat Draft</span>
-            </button>
-            <button type="button" class="action-btn" id="saveDraftBtn" title="Simpan Draft">
-                <i class="fas fa-save"></i>
-                <span>Simpan Draft</span>
-            </button>
-            <button type="button" class="action-btn" id="previewBtn" title="Preview Data">
-                <i class="fas fa-eye"></i>
-                <span>Preview</span>
-            </button>
-            <button type="button" class="action-btn" id="clearDraftBtn" title="Hapus Draft">
-                <i class="fas fa-trash"></i>
-                <span>Hapus Draft</span>
+            <button type="button" class="action-btn preview-btn" id="previewBtn" title="Lihat Data Tersimpan">
+                <i class="fas fa-database"></i>
+                <span>Lihat Data Tersimpan</span>
+                <span class="data-count" id="dataCount">0</span>
             </button>
         </div>
 
@@ -469,7 +458,7 @@
     <div id="loadingOverlay" class="loading-overlay">
         <div class="loading-content">
             <div class="loading-spinner"></div>
-            <p>Menyimpan data...</p>
+            <p id="loadingText">Menyimpan data...</p>
         </div>
     </div>
 
@@ -503,23 +492,48 @@
         </div>
     </div>
 
-    <!-- Preview Modal -->
+    <!-- Preview Data Modal -->
     <div id="previewModal" class="modal">
-        <div class="modal-content preview">
+        <div class="modal-content preview-data">
             <div class="modal-header">
-                <h3><i class="fas fa-eye"></i> Preview Data</h3>
+                <h3><i class="fas fa-database"></i> Data Tersimpan</h3>
                 <button type="button" class="modal-close" id="previewCloseBtn">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="preview-body" id="previewBody"></div>
-            <div class="modal-buttons">
-                <button type="button" class="btn btn-secondary" id="previewEditBtn">
-                    <i class="fas fa-edit"></i> Edit
+            <div class="preview-toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Cari nama siswa...">
+                </div>
+                <button type="button" class="btn-refresh" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh
                 </button>
-                <button type="button" class="btn btn-primary" id="previewSubmitBtn">
-                    <i class="fas fa-paper-plane"></i> Kirim
+            </div>
+            <div class="preview-stats">
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <span>Total: <strong id="totalData">0</strong> siswa</span>
+                </div>
+            </div>
+            <div class="preview-body" id="previewBody">
+                <!-- Data akan dimuat di sini -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content detail">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-graduate"></i> Detail Siswa</h3>
+                <button type="button" class="modal-close" id="detailCloseBtn">
+                    <i class="fas fa-times"></i>
                 </button>
+            </div>
+            <div class="detail-body" id="detailBody">
+                <!-- Detail akan dimuat di sini -->
             </div>
         </div>
     </div>
