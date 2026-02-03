@@ -1,6 +1,5 @@
-// URL Google Apps Script Web App
-// Ganti dengan URL deployment Anda setelah deploy
-const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
+// URL Google Apps Script Web App - SUDAH DIUPDATE
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyW7Co7ZWJrXYheJa3nfKviEtJwr_BkEqOFZtZgZRPta32T2VX8Q0lD8WHnqtR7is9U0A/exec';
 
 // Form submit handler
 document.getElementById('formTKA').addEventListener('submit', async function(e) {
@@ -107,7 +106,7 @@ function resetForm() {
     }
 }
 
-// Input validation - only allow numbers
+// Input validation - only allow numbers 0-100
 document.querySelectorAll('input[type="number"]').forEach(input => {
     input.addEventListener('input', function() {
         let value = parseFloat(this.value);
